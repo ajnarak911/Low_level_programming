@@ -1,83 +1,49 @@
 #include "variadic_functions.h"
 
 /**
- * print_char - prints char
- * @params: params
- */
-void print_char(va_list params)
-{
-	printf("%c", va_arg(params, int));
-}
-
-/**
- * print_int - prints int
- * @params: params
- */
-void print_int(va_list params)
-{
-	printf("%d", va_arg(params, int));
-}
-
-/**
- * print_float - prints float
- * @params: params
- */
-void print_float(va_list params)
-{
-	printf("%f", va_arg(params, double));
-}
-
-/**
- * print_string - prints string
- * @params: params
- */
-void print_string(va_list params)
-{
-	char *s;
-
-	s = va_arg(params, char *);
-	printf("%s", s ? s : NIL);
-}
-
-
-/**
- * print_all - prints anything
- * @format: list of types of args
+ * print_all - prints anything.
+ * @format: a list of types of arguments passed to the function.
  *
- * Return: void
+ * Return: no return.
  */
-
 void print_all(const char * const format, ...)
 {
-	opt_t print[] = {
-		{"c", print_char},
-		{"i", print_int},
-		{"f", print_float},
-		{"s", print_string},
-		{NULL, NULL}
-	};
+	va_list valist;
+	unsigned int i = 0, j, c = 0;
+	char *str;
+	const char t_arg[] = "cifs";
 
-	va_list params;
-	int i, j;
-	char *sep = "";
-
-	va_start(params, format);
-	i = 0;
-	while (format && *(format + i))
+	va_start(valist, format);
+	while (format && format[i])
 	{
 		j = 0;
-		while (print[j].opt && (*(print[j].opt) != *(format + i)))
-			j++;
-
-		if (print[j].opt)
+		while (t_arg[j])
 		{
-			printf("%s", sep);
-			print[j].meth(params);
-			sep = ", ";
-		}
-		i++;
+			if (format[i] == t_arg[j] && c)
+			{
+				printf(", ");
+				break;
+			} j++;									}
+		switch (format[i])
+		{
+			case 'c':
+				printf("%c", va_arg(valist, int)), c = 1;					break;
+			case 'i':
+				printf("%d", va_arg(valist, int)), c = 1;
+				break;
+			case 'f':
+				printf("%f", va_arg(valist, double)), c = 1;
+				break;
+			case 's':
+				str = va_arg(valist, char *), c = 1;
+				if (!str)
+				{
+					printf("(nil)");
+					break;
+				}
+				printf("%s", str);
+				break;
+		} i++;
 	}
-
-	va_end(params);
-	printf("\n");
+	printf("\n"), va_end(valist);
 }
