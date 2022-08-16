@@ -4,18 +4,19 @@
  * print_listint - print all elements of a list
  * @h: list
  *
- * Return: list size
+ * Return: the number of nodes
  */
 
 size_t print_listint(const listint_t *h)
 {
-	size_t nodes;
+	cons listint_t *cursor = h;
+	size_t count = 0;
 
-	for (nodes = 0; h; nodes++)
+	while (cursor != NULL)
 	{
-		printf("%d\n", (*h).n);
-		h = (*h).next;
+		printf("%d\n", cursor->n);
+		count += 1;
+		cursor = cursor->next;
 	}
-
-	return (nodes);
+	return (count);
 }
