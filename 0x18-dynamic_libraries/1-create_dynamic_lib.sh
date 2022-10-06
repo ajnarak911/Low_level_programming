@@ -1,10 +1,3 @@
 #!/bin/bash
-
-# compile *.c to *.o
-
-gcc *.c -c -fPIC
-
-
-# create liball.so
-
-gcc *.o -shared -o liball.so
+gcc -fPIC -c *.c
+gcc -shared -o liball.so *.o
